@@ -130,3 +130,13 @@ def rejected_kb():
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
     return keyboard
+
+
+def choose_rephrase_way_kb():
+    kb_list = [
+        [InlineKeyboardButton(text="Chat GPT 🤖", callback_data="gpt")],
+        [InlineKeyboardButton(text="Вручную", callback_data="manually")]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
+    return keyboard
