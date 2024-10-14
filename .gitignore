@@ -3,3 +3,4 @@
 .idea
 *.http
 test.py
+__pycache__
