@@ -27,8 +27,15 @@ async def cmd_start(message: Message):
 
 
 @start_router.callback_query(F.data == "menu")
-async def menu_handler(callback_query: CallbackQuery):
+async def menu_handler(callback_query: CallbackQuery, state: FSMContext):
+    await state.clear()
     await callback_query.message.edit_text("Воспользуйтесь меню:", reply_markup=menu_kb())
+
+
+@start_router.callback_query(F.data == "stop")
+async def menu_handler(callback_query: CallbackQuery, state: FSMContext):
+    await state.clear()
+    await callback_query.message.reply("Действие прервано")
 
 
 @start_router.callback_query(F.data == "tags")
