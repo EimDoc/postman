@@ -85,6 +85,7 @@ def send_channel_kb():
     kb_list = [
         [KeyboardButton(text="Выбрать канал", request_chat=KeyboardButtonRequestChat(
             request_id=1, chat_is_channel=True, request_title=True))],
+        [KeyboardButton(text="отмена")]
     ]
 
     keyboard = ReplyKeyboardMarkup(keyboard=kb_list, resize_keyboard=True, one_time_keyboard=True)
@@ -126,6 +127,26 @@ def accepted_kb():
 def rejected_kb():
     kb_list = [
         [InlineKeyboardButton(text="Отклонено ❌", callback_data="rejected")],
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
+    return keyboard
+
+
+def choose_rephrase_way_kb():
+    kb_list = [
+        [InlineKeyboardButton(text="Chat GPT 🤖", callback_data="gpt")],
+        [InlineKeyboardButton(text="Вручную", callback_data="manually")],
+        [InlineKeyboardButton(text="стоп", callback_data="stop")]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
+    return keyboard
+
+
+def back_button_kb():
+    kb_list = [
+        [InlineKeyboardButton(text="стоп", callback_data="stop")]
     ]
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)

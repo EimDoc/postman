@@ -41,9 +41,7 @@ class News:
 
     @property
     def media(self) -> MediaGroupBuilder:
-        if not self.__media:
-            self.__media = self.__create_media()
-        return self.__media
+        return self.__create_media()
 
     def __create_media(self) -> MediaGroupBuilder:
         media = MediaGroupBuilder(caption=self.text)
@@ -64,6 +62,13 @@ class News:
                 self.__text = "Ошибка получения текста новости"
         return self.__text
 
+    @text.setter
+    def text(self, value: str):
+        if isinstance(value, str):
+            self.__text = f"<b>{self.header}</b>\n\n" + value
+        else:
+            raise TypeError
+
     @property
     def header(self) -> str:
         if not self.__header:
@@ -72,6 +77,13 @@ class News:
             except KeyError:
                 self.__header = "Ошибка получения заголовка новости"
         return self.__header
+
+    @header.setter
+    def header(self, value: str):
+        if isinstance(value, str):
+            self.__header = value
+        else:
+            raise TypeError
 
     @property
     def keyboard(self) -> InlineKeyboardMarkup:
