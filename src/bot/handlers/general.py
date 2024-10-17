@@ -40,7 +40,7 @@ async def stop_callback_handler(callback_query: CallbackQuery, state: FSMContext
     await callback_query.message.reply("Действие прервано")
 
 
-@start_router.message(StopFilter())
+@start_router.message(F.text, StopFilter())
 async def stop_message_handler(message: Message, state: FSMContext):
     await state.clear()
     await message.reply("Действие прервано", reply_markup=menu_kb())

@@ -7,7 +7,7 @@ from src.bot.create_bot import BotData
 from src.entities.callback_data import DeleteDonor, TagData
 from src.bot.keyboards.all_keyboards import donor_kb, back_to_menu_kb, delete_donor_kb, send_channel_kb, tags_list_kb, \
     menu_kb
-from src.bot.utils.my_utils import create_donor_text
+from src.bot.utils.my_utils import create_donor_text, choose_tags_for_channel
 
 donor_router = Router()
 
@@ -61,25 +61,9 @@ async def start_add_donor_handler(callback_query: CallbackQuery, state: FSMConte
     await state.set_state(AddDonor.get_channel)
 
 
-@donor_router.message(AddDonor.get_channel)
+@donor_router.message(AddDonor.get_channel, F.chat_shared)
 async def get_channel_handler(message: Message, state: FSMContext):
-    try:
-        await state.update_data(channel_id=message.chat_shared.chat_id, channel_name=message.chat_shared.title)
-
-        tags = await BotData.tag_db.read_tags()
-        if len(tags) > 0:
-            await message.answer("Выберите тег для канала:", reply_markup=tags_list_kb(tags))
-            await state.set_state(AddDonor.get_tag)
-        else:
-            await message.answer("ERROR: У вас нет тегов! Добавьте их чтобы создать пару донор-тег", reply_markup=ReplyKeyboardRemove())
-            await state.clear()
-            await message.answer("Воспользуйтесь меню", reply_markup=menu_kb())
-    except OperationalError:
-        await message.reply("ERROR: ошибка при sql запросе", reply_markup=ReplyKeyboardRemove())
-        await state.clear()
-    except Exception:
-        await message.answer("Ошибка при получении канала")
-        await state.clear()
+    await choose_tags_for_channel(message, state, AddDonor.get_tag)
 
 
 @donor_router.callback_query(TagData.filter(), AddDonor.get_tag)
