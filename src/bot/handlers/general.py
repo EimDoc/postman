@@ -3,10 +3,12 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, CallbackQuery
+from aiomysql import OperationalError
+
 from src.bot.keyboards.all_keyboards import menu_kb, tags_kb, back_to_menu_kb, delete_tag_kb
 from src.bot.create_bot import BotData
 from src.bot.utils.my_utils import create_tags_text
-from aiomysql import OperationalError
+from src.bot.filters.all_filters import StopFilter
 from src.entities.callback_data import TagDelete
 
 
@@ -33,9 +35,15 @@ async def menu_handler(callback_query: CallbackQuery, state: FSMContext):
 
 
 @start_router.callback_query(F.data == "stop")
-async def menu_handler(callback_query: CallbackQuery, state: FSMContext):
+async def stop_callback_handler(callback_query: CallbackQuery, state: FSMContext):
     await state.clear()
     await callback_query.message.reply("Действие прервано")
+
+
+@start_router.message(StopFilter())
+async def stop_message_handler(message: Message, state: FSMContext):
+    await state.clear()
+    await message.reply("Действие прервано", reply_markup=menu_kb())
 
 
 @start_router.callback_query(F.data == "tags")

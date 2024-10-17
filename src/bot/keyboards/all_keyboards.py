@@ -85,6 +85,7 @@ def send_channel_kb():
     kb_list = [
         [KeyboardButton(text="Выбрать канал", request_chat=KeyboardButtonRequestChat(
             request_id=1, chat_is_channel=True, request_title=True))],
+        [KeyboardButton(text="отмена")]
     ]
 
     keyboard = ReplyKeyboardMarkup(keyboard=kb_list, resize_keyboard=True, one_time_keyboard=True)
