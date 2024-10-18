@@ -1,6 +1,8 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, KeyboardButtonRequestChat
 from typing import List
-from src.entities.callback_data import DeleteDonor, TagData, TagDelete, DeleteReceiver
+
+from src.entities.callback_data import DeleteDonor, TagData, TagDelete, DeleteReceiver, SwitchToggleCallback
+from src.bot.create_bot import Toggles
 
 
 def menu_kb():
@@ -148,6 +150,19 @@ def back_button_kb():
     kb_list = [
         [InlineKeyboardButton(text="стоп", callback_data="stop")]
     ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
+    return keyboard
+
+
+def settings_menu_kb():
+
+    kb_list = []
+    for key, value in Toggles.__dict__.items():
+        if not key.startswith("_"):
+            callback_data = SwitchToggleCallback(toggle_name=key).pack()
+            kb_list.append([InlineKeyboardButton(text=f"{key}: {value}", callback_data=callback_data)])
+    kb_list.append([InlineKeyboardButton(text="Меню", callback_data="menu")])
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
     return keyboard

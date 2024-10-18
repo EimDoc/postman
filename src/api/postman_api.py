@@ -1,13 +1,17 @@
 import uvicorn
 from fastapi import FastAPI, Body
+from fastapi.openapi.models import Response
+
 from src.bot.handlers.send import send_news_to_moderation
+from src.bot.create_bot import Toggles
 
 app = FastAPI()
 
 
 @app.post("/send")
 async def send(data=Body()):
-    await send_news_to_moderation(data)
+    if Toggles.send_news:
+        await send_news_to_moderation(data)
 
 
 async def run_fastapi():

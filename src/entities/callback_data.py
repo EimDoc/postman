@@ -28,3 +28,7 @@ class RejectNews(CallbackData, prefix="reject_news"):
 
 class RephraseNews(CallbackData, prefix="rephrase_news"):
     news_id: UUID
+
+
+class SwitchToggleCallback(CallbackData, prefix="switch_toggle"):
+    toggle_name: str
