@@ -26,3 +26,9 @@ class BotData:
     publisher = Publisher()
     consumer = Consumer()
     MODERATION_ID: Final[int] = -4545511074
+
+
+@dataclass(init=False)
+class Toggles:
+    send_news: bool = True
+    auto_accept: bool = False
