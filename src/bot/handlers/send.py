@@ -3,7 +3,7 @@ from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 
-from src.bot.create_bot import BotData
+from src.bot.create_bot import BotData, Toggles
 from src.entities.entities import News
 from src.entities.callback_data import AcceptNews, RejectNews, RephraseNews
 from src.bot.keyboards.all_keyboards import accepted_kb, rejected_kb, choose_rephrase_way_kb, back_button_kb
@@ -23,14 +23,17 @@ class FSMRephrase(StatesGroup):
 
 async def send_news_to_moderation(data: dict):
     news = News(data)
-    media = news.media
-    keyboard = news.keyboard
-    await BotData.bot.send_media_group(BotData.MODERATION_ID, media=media.build())
-    await BotData.bot.send_message(
-        BotData.MODERATION_ID,
-        f"Действия с новостью <b>{news.header}</b>:",
-        reply_markup=keyboard
-    )
+    if not Toggles.auto_accept:
+        media = news.media
+        keyboard = news.keyboard
+        await BotData.bot.send_media_group(BotData.MODERATION_ID, media=media.build())
+        await BotData.bot.send_message(
+            BotData.MODERATION_ID,
+            f"Действия с новостью <b>{news.header}</b>:",
+            reply_markup=keyboard
+        )
+    else:
+        await send_news_to_channels(news)
 
 
 @send_router.callback_query(AcceptNews.filter())
