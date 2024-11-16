@@ -29,7 +29,7 @@ class News:
     def __init__(self, data: dict):
         try:
             self.__data = data
-            self.__tag_id = data.get("news_tag_id")
+            self.__tag_id = data.get("tag_id")
             self.__media = None
             self.__text = None
             self.__header = None
@@ -46,7 +46,7 @@ class News:
     def __create_media(self) -> MediaGroupBuilder:
         media = MediaGroupBuilder(caption=self.text)
         try:
-            for elem in self.__data.get("news_data").get("media"):
+            for elem in self.__data.get("content").get("media"):
                 media.add(type=elem[1], media=elem[0])
         except KeyError:
             print("ERROR: отсутствие медиа в новости")
@@ -56,7 +56,7 @@ class News:
     def text(self) -> str:
         if not self.__text:
             try:
-                text = f"<b>{self.header}</b>\n\n{self.__data.get('news_data').get('text')}"
+                text = f"<b>{self.header}</b>\n\n{self.__data.get('content').get('text')}"
                 self.__text = text
             except KeyError:
                 self.__text = "Ошибка получения текста новости"
@@ -73,7 +73,7 @@ class News:
     def header(self) -> str:
         if not self.__header:
             try:
-                self.__header = self.__data.get("news_data").get("header")
+                self.__header = self.__data.get("content").get("header")
             except KeyError:
                 self.__header = "Ошибка получения заголовка новости"
         return self.__header
